@@ -1,5 +1,6 @@
 <template>
-  <div class="page-content">
+  <div class="auth-page">
+    <div class="auth-bg-decoration"></div>
     <div class="auth-container">
       <div class="auth-card card">
         <div class="auth-header">
@@ -52,7 +53,7 @@
                 <input type="checkbox" v-model="rememberMe" />
                 <span>Remember me</span>
               </label>
-              <router-link to="/forgot-password" class="forgot-link">Forgot password?</router-link>
+              <span class="forgot-link disabled-link" title="Feature coming soon">Forgot password?</span>
             </div>
 
             <button type="submit" class="btn btn-primary btn-block btn-lg" :disabled="loading">
@@ -123,12 +124,38 @@ async function handleLogin() {
 </script>
 
 <style scoped>
+.auth-page {
+  position: relative;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: calc(100vh - 70px);
+  overflow: hidden;
+}
+
+.auth-bg-decoration {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+  animation: bgFloat 20s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes bgFloat {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(5%, 5%) rotate(120deg); }
+  66% { transform: translate(-5%, -5%) rotate(240deg); }
+}
+
 .auth-container {
   display: flex;
   justify-content: center;
   align-items: flex-start;
   padding: 40px 20px 60px;
-  min-height: calc(100vh - 160px);
+  min-height: calc(100vh - 70px);
+  position: relative;
+  z-index: 1;
 }
 
 .auth-card {
@@ -235,6 +262,15 @@ async function handleLogin() {
 
 .forgot-link:hover {
   text-decoration: underline;
+}
+
+.disabled-link {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.disabled-link:hover {
+  text-decoration: none;
 }
 
 .btn-spinner {

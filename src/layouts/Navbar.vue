@@ -168,7 +168,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import { useToast } from '../composables/useToast'
@@ -235,8 +235,15 @@ watch(mobileMenuOpen, (val) => {
   }
 })
 
+// Listen for cart-updated events from other components (e.g., quick add)
 onMounted(() => {
   loadCartCount()
+  window.addEventListener('cart-updated', loadCartCount)
+})
+
+// Clean up event listener
+onUnmounted(() => {
+  window.removeEventListener('cart-updated', loadCartCount)
 })
 </script>
 

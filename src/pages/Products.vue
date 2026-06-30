@@ -32,7 +32,7 @@
             <div class="form-group">
               <label class="form-label">Sort By</label>
               <select v-model="filters.sort" class="form-select" @change="applyFilters">
-                <option value="created_at">Newest</option>
+<option value="-created_at">Newest</option>
                 <option value="price">Price: Low to High</option>
                 <option value="-price">Price: High to Low</option>
                 <option value="name">Name</option>
@@ -151,7 +151,7 @@ const filters = reactive({
   search: route.query.search || '',
   min_price: route.query.min_price || '',
   max_price: route.query.max_price || '',
-  sort: route.query.sort || 'created_at',
+  sort: route.query.sort || '-created_at',
   page: route.query.page || 1,
 })
 
@@ -173,6 +173,8 @@ async function quickAdd(product) {
   try {
     await api.post('/cart', { product_id: product.id, quantity: 1 })
     toast.success(`${product.name} added to cart!`)
+    // Dispatch event so Navbar can update cart count
+    window.dispatchEvent(new CustomEvent('cart-updated'))
   } catch (e) {
     toast.error(e.response?.data?.message || 'Failed to add to cart')
   }
@@ -225,7 +227,7 @@ function clearFilters() {
   filters.search = ''
   filters.min_price = ''
   filters.max_price = ''
-  filters.sort = 'created_at'
+  filters.sort = '-created_at'
   filters.page = 1
   router.push({ name: 'Products' })
   loadProducts()

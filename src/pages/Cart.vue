@@ -183,6 +183,7 @@ async function updateQuantity(item, delta) {
   try {
     await api.put(`/cart/${item.id}`, { quantity: newQty })
     item.quantity = newQty
+    window.dispatchEvent(new CustomEvent('cart-updated'))
   } catch (e) {
     toast.error(e.response?.data?.message || 'Failed to update quantity')
   }
@@ -193,6 +194,7 @@ async function removeItem(item) {
     await api.delete(`/cart/${item.id}`)
     cartItems.value = cartItems.value.filter(i => i.id !== item.id)
     toast.info('Item removed from cart')
+    window.dispatchEvent(new CustomEvent('cart-updated'))
   } catch (e) {
     toast.error(e.response?.data?.message || 'Failed to remove item')
   }
